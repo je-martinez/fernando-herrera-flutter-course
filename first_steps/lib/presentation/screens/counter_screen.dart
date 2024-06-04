@@ -10,6 +10,14 @@ class CounterScreen extends StatefulWidget {
 class _CounterScreenState extends State<CounterScreen> {
   int counter = 0;
 
+  String get message {
+    if (counter == 1) {
+      return 'Tap';
+    } else {
+      return 'Taps';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,9 +33,9 @@ class _CounterScreenState extends State<CounterScreen> {
                 style: const TextStyle(
                     fontSize: 120, fontWeight: FontWeight.w200)),
             const SizedBox(height: 10),
-            const Text(
-              'Taps',
-              style: TextStyle(fontSize: 25),
+            Text(
+              message,
+              style: const TextStyle(fontSize: 25),
             ),
             const SizedBox(height: 10),
           ],
