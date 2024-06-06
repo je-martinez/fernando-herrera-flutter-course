@@ -42,4 +42,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-assets/*.mp4
+assets/videos/*.mp4
