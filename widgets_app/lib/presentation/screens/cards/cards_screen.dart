@@ -53,6 +53,24 @@ class _CardsView extends StatelessWidget {
               label: card['label'],
             ),
           ),
+          ...cards.map(
+            (card) => _CardType2(
+              elevation: card['elevation'],
+              label: card['label'],
+            ),
+          ),
+          ...cards.map(
+            (card) => _CardType3(
+              elevation: card['elevation'],
+              label: card['label'],
+            ),
+          ),
+          ...cards.map(
+            (card) => _CardType4(
+              elevation: card['elevation'],
+              label: card['label'],
+            ),
+          ),
         ],
       ),
     );
@@ -74,7 +92,7 @@ class _CardType1 extends StatelessWidget {
         child: Column(
           children: [
             Align(
-                alignment: Alignment.topRight,
+                alignment: Alignment.centerRight,
                 child: IconButton(
                   icon: const Icon(Icons.more_vert_outlined),
                   onPressed: () {},
@@ -82,6 +100,107 @@ class _CardType1 extends StatelessWidget {
             Align(alignment: Alignment.bottomLeft, child: Text(label))
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _CardType2 extends StatelessWidget {
+  final double elevation;
+  final String label;
+
+  const _CardType2({super.key, required this.elevation, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
+    return Card(
+      shape: RoundedRectangleBorder(
+          side: BorderSide(color: colors.outline),
+          borderRadius: const BorderRadius.all(Radius.circular(10))),
+      elevation: elevation,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
+        child: Column(
+          children: [
+            Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                  icon: const Icon(Icons.more_vert_outlined),
+                  onPressed: () {},
+                )),
+            Align(
+                alignment: Alignment.bottomLeft,
+                child: Text("$label - outline"))
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CardType3 extends StatelessWidget {
+  final double elevation;
+  final String label;
+
+  const _CardType3({super.key, required this.elevation, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
+    return Card(
+      color: colors.surfaceContainerHighest,
+      elevation: elevation,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
+        child: Column(
+          children: [
+            Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                  icon: const Icon(Icons.more_vert_outlined),
+                  onPressed: () {},
+                )),
+            Align(alignment: Alignment.bottomLeft, child: Text("$label filled"))
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CardType4 extends StatelessWidget {
+  final double elevation;
+  final String label;
+
+  const _CardType4({super.key, required this.elevation, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
+    return Card(
+      clipBehavior: Clip.hardEdge,
+      elevation: elevation,
+      child: Stack(
+        children: [
+          Image.network('https://picsum.photos/id/${elevation.toInt()}/600/250',
+              height: 350, fit: BoxFit.cover),
+          Align(
+              alignment: Alignment.centerRight,
+              child: Container(
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.only(bottomLeft: Radius.circular(20))),
+                child: IconButton(
+                  icon: const Icon(Icons.more_vert_outlined),
+                  onPressed: () {},
+                ),
+              )),
+        ],
       ),
     );
   }
