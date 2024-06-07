@@ -24,6 +24,8 @@ const cards = <Map<String, dynamic>>[
 ];
 
 class CardScreen extends StatelessWidget {
+  static String name = 'card_screen';
+
   const CardScreen({super.key});
 
   @override
