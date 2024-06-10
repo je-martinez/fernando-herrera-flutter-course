@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
 class InfiniteScrollScreen extends StatefulWidget {
@@ -24,6 +25,11 @@ class _InfiniteScrollScreenState extends State<InfiniteScrollScreen> {
     if (isLoading) return;
     isLoading = true;
     setState(() {});
+    const snackbar = SnackBar(
+      content: Text('Fetching more images...'),
+      duration: Duration(minutes: 10),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
 
     await Future.delayed(const Duration(seconds: 2));
 
@@ -32,6 +38,7 @@ class _InfiniteScrollScreenState extends State<InfiniteScrollScreen> {
 
     if (!isMounted) return;
     setState(() {});
+    if (mounted) ScaffoldMessenger.of(context).hideCurrentSnackBar();
   }
 
   @override
@@ -77,7 +84,12 @@ class _InfiniteScrollScreenState extends State<InfiniteScrollScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: const Icon(Icons.arrow_back_ios_new),
+        child: !isLoading
+            ? FadeIn(child: const Icon(Icons.arrow_back_ios_new))
+            : FadeIn(
+                child: SpinPerfect(
+                    infinite: true, child: const Icon(Icons.refresh_rounded)),
+              ),
       ),
     );
   }
