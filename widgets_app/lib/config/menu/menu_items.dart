@@ -56,4 +56,10 @@ const appMenuItems = <MenuItem>[
     link: '/tutorial',
     icon: Icons.accessibility_rounded,
   ),
+  MenuItem(
+    title: 'Infinite Scroll',
+    subtitle: 'Scroll infinito en Flutter',
+    link: '/infinite',
+    icon: Icons.arrow_downward,
+  ),
 ];

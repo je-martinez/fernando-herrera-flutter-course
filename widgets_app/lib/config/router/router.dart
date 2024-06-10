@@ -1,5 +1,4 @@
 import 'package:go_router/go_router.dart';
-import 'package:widgets_app/presentation/screens/progress/progress_screen.dart';
 import 'package:widgets_app/presentation/screens/screens.dart';
 
 final appRouter = GoRouter(initialLocation: '/', routes: [
@@ -35,4 +34,8 @@ final appRouter = GoRouter(initialLocation: '/', routes: [
       name: AppTutorial.name,
       path: '/tutorial',
       builder: (context, state) => const AppTutorial()),
+  GoRoute(
+      name: InfiniteScrollScreen.name,
+      path: '/infinite',
+      builder: (context, state) => const InfiniteScrollScreen()),
 ]);
