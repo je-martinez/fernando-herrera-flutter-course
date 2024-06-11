@@ -2,6 +2,11 @@
 
 A new Flutter project.
 
+## Steps
+
+1. Copy.env.example and rename it to .env.
+2. Set the environment variables
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
