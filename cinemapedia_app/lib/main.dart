@@ -7,7 +7,7 @@ import 'package:cinemapedia_app/config/theme/app_theme.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
-  runApp(ProviderScope(child: const MyApp()));
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
