@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class InfiniteScrollScreen extends StatefulWidget {
   static String name = 'infinite_scroll_screen';
@@ -103,7 +104,9 @@ class _InfiniteScrollScreenState extends State<InfiniteScrollScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          context.pop();
+        },
         child: _FloatingButton(
           isLoading: isLoading,
         ),
