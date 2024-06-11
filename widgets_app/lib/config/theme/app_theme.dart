@@ -23,6 +23,7 @@ class AppTheme {
     return ThemeData(
         useMaterial3: true,
         colorSchemeSeed: colorList[selectedColor],
+        brightness: Brightness.light,
         appBarTheme: const AppBarTheme(centerTitle: false));
   }
 }
