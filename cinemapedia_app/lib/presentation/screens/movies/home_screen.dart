@@ -47,31 +47,53 @@ class _NowPlayingMovies extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        const CustomAppBar(),
-        const SizedBox(height: 20),
-        MoviesSlideshow(movies: slideShowMovies),
-        MovieHorizontalListView(
-          movies: nowPlayingMovies,
-          title: 'En cines',
-          subtitle: 'lunes 20',
-          loadNextPage: () {
-            ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-          },
+    return CustomScrollView(
+      slivers: [
+        const SliverAppBar(
+          floating: true,
+          flexibleSpace: CustomAppBar(),
+        ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, indext) => Column(
+              children: [
+                const SizedBox(height: 20),
+
+                MoviesSlideshow(movies: slideShowMovies),
+
+                MovieHorizontalListView(
+                  movies: nowPlayingMovies,
+                  title: 'En cines',
+                  subtitle: 'lunes 20',
+                  loadNextPage: () {
+                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                  },
+                ),
+
+                MovieHorizontalListView(
+                  movies: nowPlayingMovies,
+                  title: 'Populares',
+                  subtitle: 'Desde siempre',
+                  loadNextPage: () {
+                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                  },
+                ),
+                // Expanded(
+                //   child: ListView.builder(
+                //     itemCount: nowPlayingMovies.length,
+                //     itemBuilder: (context, index) {
+                //       final movie = nowPlayingMovies[index];
+                //       return ListTile(
+                //         title: Text(movie.title),
+                //         subtitle: Text(movie.overview),
+                //       );
+                //     },
+                //   ),
+                // ),
+              ],
+            ),
+          ),
         )
-        // Expanded(
-        //   child: ListView.builder(
-        //     itemCount: nowPlayingMovies.length,
-        //     itemBuilder: (context, index) {
-        //       final movie = nowPlayingMovies[index];
-        //       return ListTile(
-        //         title: Text(movie.title),
-        //         subtitle: Text(movie.overview),
-        //       );
-        //     },
-        //   ),
-        // ),
       ],
     );
   }
