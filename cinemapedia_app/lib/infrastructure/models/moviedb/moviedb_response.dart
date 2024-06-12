@@ -17,7 +17,7 @@ class MovieDbResponse {
 
   factory MovieDbResponse.fromJson(Map<String, dynamic> json) =>
       MovieDbResponse(
-        dates: json["dates"] ? Dates.fromJson(json["dates"]) : null,
+        dates: json["dates"] != null ? Dates.fromJson(json["dates"]) : null,
         page: json["page"],
         results: List<MovieMovieDB>.from(
             json["results"].map((x) => MovieMovieDB.fromJson(x))),
@@ -36,22 +36,26 @@ class MovieDbResponse {
 
 class Dates {
   Dates({
-    required this.maximum,
-    required this.minimum,
+    this.maximum,
+    this.minimum,
   });
 
-  final DateTime maximum;
-  final DateTime minimum;
+  final DateTime? maximum;
+  final DateTime? minimum;
 
   factory Dates.fromJson(Map<String, dynamic> json) => Dates(
-        maximum: DateTime.parse(json["maximum"]),
-        minimum: DateTime.parse(json["minimum"]),
+        maximum:
+            json["maximum"] != null ? DateTime.parse(json["maximum"]) : null,
+        minimum:
+            json["minimum"] != null ? DateTime.parse(json["minimum"]) : null,
       );
 
   Map<String, dynamic> toJson() => {
-        "maximum":
-            "${maximum.year.toString().padLeft(4, '0')}-${maximum.month.toString().padLeft(2, '0')}-${maximum.day.toString().padLeft(2, '0')}",
-        "minimum":
-            "${minimum.year.toString().padLeft(4, '0')}-${minimum.month.toString().padLeft(2, '0')}-${minimum.day.toString().padLeft(2, '0')}",
+        "maximum": maximum == null
+            ? null
+            : "${maximum?.year.toString().padLeft(4, '0')}-${maximum?.month.toString().padLeft(2, '0')}-${maximum?.day.toString().padLeft(2, '0')}",
+        "minimum": minimum == null
+            ? null
+            : "${minimum?.year.toString().padLeft(4, '0')}-${minimum?.month.toString().padLeft(2, '0')}-${minimum?.day.toString().padLeft(2, '0')}",
       };
 }
