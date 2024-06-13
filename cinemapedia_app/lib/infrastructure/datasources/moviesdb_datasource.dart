@@ -14,16 +14,12 @@ class MoviesDbDatasource extends MoviesDatasource {
       }));
 
   List<Movie> _jsonToEntity(Map<String, dynamic> json) {
-    try {
-      final MovieDbResponse movieDbResponse = MovieDbResponse.fromJson(json);
-      final List<Movie> movies = movieDbResponse.results
-          .where((moviedb) => moviedb.posterPath != '')
-          .map((moviedb) => MovieMapper.movieDBToEntity(moviedb))
-          .toList();
-      return movies;
-    } catch (e) {
-      return [];
-    }
+    final MovieDbResponse movieDbResponse = MovieDbResponse.fromJson(json);
+    final List<Movie> movies = movieDbResponse.results
+        .where((moviedb) => moviedb.posterPath != '')
+        .map((moviedb) => MovieMapper.movieDBToEntity(moviedb))
+        .toList();
+    return movies;
   }
 
   @override
