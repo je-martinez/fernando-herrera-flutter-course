@@ -55,7 +55,8 @@ class _NowPlayingMovies extends ConsumerWidget {
         ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
-            (context, indext) => Column(
+            childCount: 1,
+            (context, index) => Column(
               children: [
                 const SizedBox(height: 20),
 
