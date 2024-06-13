@@ -29,11 +29,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final popularMovies = ref.watch(popularMoviesProvider);
     final topRatedMovies = ref.watch(topRatedMoviesProvider);
     final upcomingMovies = ref.watch(upcomingMoviesProvider);
+    final isLoading = ref.watch(initialLoadingProvider);
 
     return Scaffold(
-        bottomNavigationBar: const CustomBottomNavigation(),
-        body: nowPlayingMovies.isEmpty
-            ? const Center(child: CircularProgressIndicator())
+        bottomNavigationBar: isLoading ? null : const CustomBottomNavigation(),
+        // body: nowPlayingMovies.isEmpty
+        body: isLoading
+            ? const FullScreenLoader()
             : _NowPlayingMovies(
                 nowPlayingMovies: nowPlayingMovies,
                 slideShowMovies: slideShowMovies,
