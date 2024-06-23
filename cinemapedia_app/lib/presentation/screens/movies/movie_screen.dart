@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:cinemapedia_app/domain/entities/actor.dart';
 import 'package:cinemapedia_app/domain/entities/movie.dart';
 import 'package:cinemapedia_app/presentation/providers/providers.dart';
@@ -131,10 +132,13 @@ class _CustomSliverAppBar extends StatelessWidget {
         background: Stack(
           children: [
             SizedBox.expand(
-              child: Image.network(
-                movie.posterPath,
-                fit: BoxFit.cover,
-              ),
+              child: Image.network(movie.posterPath, fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) {
+                  return FadeIn(child: child);
+                }
+                return const SizedBox();
+              }),
             ),
             const SizedBox.expand(
               child: DecoratedBox(
@@ -281,13 +285,15 @@ class _MovieCastList extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image.network(
-                        actor.profilePath,
-                        width: 180,
-                        height: 135,
-                        fit: BoxFit.cover,
+                    FadeInRight(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.network(
+                          actor.profilePath,
+                          width: 180,
+                          height: 135,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 5),
