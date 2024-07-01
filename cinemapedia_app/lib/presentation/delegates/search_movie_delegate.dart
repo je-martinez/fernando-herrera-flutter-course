@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:cinemapedia_app/config/helpers/human_formats.dart';
 import 'package:cinemapedia_app/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
 
@@ -70,6 +71,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
             return _MovieItem(
               movie: movie,
+              onMovieSelected: close,
             );
           },
         );
@@ -80,7 +82,9 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
 class _MovieItem extends StatelessWidget {
   final Movie movie;
-  const _MovieItem({required this.movie, super.key});
+  final Function onMovieSelected;
+  const _MovieItem(
+      {required this.movie, super.key, required this.onMovieSelected});
 
   String get overview {
     if (movie.overview.length > 100) {
@@ -94,44 +98,63 @@ class _MovieItem extends StatelessWidget {
     final textStyles = Theme.of(context).textTheme;
     final size = MediaQuery.of(context).size;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: size.width * 0.2,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                movie.posterPath,
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) {
-                    return FadeIn(child: child);
-                  }
+    return GestureDetector(
+      onTap: () {
+        onMovieSelected(context, movie);
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: size.width * 0.2,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  movie.posterPath,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return FadeIn(child: child);
+                    }
 
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          SizedBox(
-            width: size.width * 0.7,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(movie.title, style: textStyles.titleMedium),
-                Text(overview)
-              ],
+            const SizedBox(
+              width: 10,
             ),
-          )
-        ],
+            SizedBox(
+              width: size.width * 0.7,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(movie.title, style: textStyles.titleMedium),
+                  Text(overview),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.star_half_rounded,
+                        color: Colors.yellow.shade800,
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        HumanFormats.number(movie.voteAverage, 1).toString(),
+                        style: textStyles.bodyMedium!
+                            .copyWith(color: Colors.yellow.shade800),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
