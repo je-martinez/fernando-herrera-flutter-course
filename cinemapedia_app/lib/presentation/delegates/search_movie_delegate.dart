@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:cinemapedia_app/config/helpers/human_formats.dart';
 import 'package:cinemapedia_app/domain/entities/movie.dart';
@@ -7,8 +9,30 @@ typedef SearchMoviesCallback = Future<List<Movie>> Function(String query);
 
 class SearchMovieDelegate extends SearchDelegate<Movie?> {
   final SearchMoviesCallback searchMovies;
+  StreamController<List<Movie>> debouncedMovies = StreamController.broadcast();
+  Timer? _debounced;
 
   SearchMovieDelegate({required this.searchMovies});
+
+  void disposeStreams() {
+    print('SearchMovieDelegate disposeStreams');
+    debouncedMovies.close();
+  }
+
+  void _onQueryChanged() {
+    print('Query changed: $query');
+    if (_debounced?.isActive ?? false) _debounced!.cancel();
+    _debounced = Timer(const Duration(milliseconds: 500), () async {
+      if (query.isEmpty) {
+        debouncedMovies.add([]);
+        return;
+      }
+
+      print('Searching movies for query: $query');
+      final movies = await searchMovies(query);
+      debouncedMovies.add(movies);
+    });
+  }
 
   @override
   String get searchFieldLabel => 'Buscar película';
@@ -34,6 +58,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
     return IconButton(
       icon: const Icon(Icons.arrow_back),
       onPressed: () {
+        disposeStreams();
         close(context, null);
       },
     );
@@ -46,17 +71,12 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return FutureBuilder<List<Movie>>(
-      future: searchMovies(query),
+    _onQueryChanged();
+    return StreamBuilder<List<Movie>>(
+      stream: debouncedMovies.stream,
+      initialData: const [],
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
         if (snapshot.hasError) {
-          print(snapshot.error);
           return const Center(
             child: Text('Error al buscar películas'),
           );

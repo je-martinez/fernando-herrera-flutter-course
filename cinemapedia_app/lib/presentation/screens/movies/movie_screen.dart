@@ -270,7 +270,7 @@ class _MovieCastList extends ConsumerWidget {
       return const CircularProgressIndicator(strokeWidth: 2);
     }
 
-    print(actorsByMovie.length);
+    // print(actorsByMovie.length);
 
     return SizedBox(
         height: 300,
