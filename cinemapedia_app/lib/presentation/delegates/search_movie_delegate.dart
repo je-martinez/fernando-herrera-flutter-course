@@ -8,11 +8,13 @@ import 'package:flutter/material.dart';
 typedef SearchMoviesCallback = Future<List<Movie>> Function(String query);
 
 class SearchMovieDelegate extends SearchDelegate<Movie?> {
+  List<Movie> initialMovies;
   final SearchMoviesCallback searchMovies;
   StreamController<List<Movie>> debouncedMovies = StreamController.broadcast();
   Timer? _debounced;
 
-  SearchMovieDelegate({required this.searchMovies});
+  SearchMovieDelegate(
+      {required this.initialMovies, required this.searchMovies});
 
   void disposeStreams() {
     print('SearchMovieDelegate disposeStreams');
@@ -23,13 +25,9 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
     print('Query changed: $query');
     if (_debounced?.isActive ?? false) _debounced!.cancel();
     _debounced = Timer(const Duration(milliseconds: 500), () async {
-      if (query.isEmpty) {
-        debouncedMovies.add([]);
-        return;
-      }
-
       print('Searching movies for query: $query');
       final movies = await searchMovies(query);
+      initialMovies = movies;
       debouncedMovies.add(movies);
     });
   }
@@ -66,15 +64,19 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return Container();
+    return _buildResulstsAndSuggestions();
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     _onQueryChanged();
+    return _buildResulstsAndSuggestions();
+  }
+
+  Widget _buildResulstsAndSuggestions() {
     return StreamBuilder<List<Movie>>(
       stream: debouncedMovies.stream,
-      initialData: const [],
+      initialData: initialMovies,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Center(
