@@ -55,6 +55,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
         }
 
         if (snapshot.hasError) {
+          print(snapshot.error);
           return const Center(
             child: Text('Error al buscar películas'),
           );
@@ -67,15 +68,50 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
           itemBuilder: (context, index) {
             final movie = movies[index];
 
-            return ListTile(
-              title: Text(movie.title),
-              onTap: () {
-                close(context, movie);
-              },
+            return _MovieItem(
+              movie: movie,
             );
           },
         );
       },
+    );
+  }
+}
+
+class _MovieItem extends StatelessWidget {
+  final Movie movie;
+  const _MovieItem({required this.movie, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final textStyles = Theme.of(context).textTheme;
+    final size = MediaQuery.of(context).size;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      child: Row(
+        children: [
+          SizedBox(
+            width: size.width * 0.2,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.network(
+                movie.posterPath,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) {
+                    return FadeIn(child: child);
+                  }
+
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

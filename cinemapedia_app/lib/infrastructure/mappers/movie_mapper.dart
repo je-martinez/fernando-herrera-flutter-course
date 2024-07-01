@@ -5,6 +5,9 @@ import 'package:cinemapedia_app/infrastructure/models/moviedb/movie_moviedb.dart
 // ignore: constant_identifier_names
 enum MovieDefaults { no_poster }
 
+const noPosterImage =
+    'https://viterbi-web.usc.edu/~zexunyao/itp301/Assignment_07/img.jpeg';
+
 const String notFoundImage =
     'https://img.freepik.com/vector-gratis/poster-error-404-pagina-no-encontrada-usar-sitio-web_1284-49337.jpg';
 
@@ -22,7 +25,8 @@ class MovieMapper {
       popularity: movie.popularity,
       posterPath: movie.posterPath != ""
           ? 'https://image.tmdb.org/t/p/w500/${movie.posterPath}'
-          : MovieDefaults.no_poster.name,
+          // : MovieDefaults.no_poster.name,
+          : noPosterImage,
       releaseDate: movie.releaseDate,
       title: movie.title,
       video: movie.video,
@@ -41,7 +45,8 @@ class MovieMapper {
       popularity: movie.popularity,
       posterPath: movie.posterPath != ""
           ? 'https://image.tmdb.org/t/p/w500/${movie.posterPath}'
-          : MovieDefaults.no_poster.name,
+          // : MovieDefaults.no_poster.name,
+          : noPosterImage,
       releaseDate: movie.releaseDate,
       title: movie.title,
       video: movie.video,
