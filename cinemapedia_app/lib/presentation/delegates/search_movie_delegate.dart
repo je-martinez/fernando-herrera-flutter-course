@@ -82,6 +82,13 @@ class _MovieItem extends StatelessWidget {
   final Movie movie;
   const _MovieItem({required this.movie, super.key});
 
+  String get overview {
+    if (movie.overview.length > 100) {
+      return '${movie.overview.substring(0, 100)}...';
+    }
+    return movie.overview;
+  }
+
   @override
   Widget build(BuildContext context) {
     final textStyles = Theme.of(context).textTheme;
@@ -90,6 +97,7 @@ class _MovieItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
             width: size.width * 0.2,
@@ -110,6 +118,19 @@ class _MovieItem extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(
+            width: 10,
+          ),
+          SizedBox(
+            width: size.width * 0.7,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(movie.title, style: textStyles.titleMedium),
+                Text(overview)
+              ],
+            ),
+          )
         ],
       ),
     );
