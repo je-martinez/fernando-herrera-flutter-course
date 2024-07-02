@@ -38,9 +38,10 @@ class IsarDatasource extends LocalStorageDatasource {
   Future<void> toogleFavorite(Movie movie) async {
     final isar = await db;
     await isar.writeTxn(() async {
-      final movieIsFavorite = await isMovieFavorite(movie.id);
-      if (movieIsFavorite) {
-        await isar.movies.delete(movie.id);
+      final alreadyFavorite =
+          await isar.movies.filter().idEqualTo(movie.id).findFirst();
+      if (alreadyFavorite != null) {
+        await isar.movies.delete(alreadyFavorite.isarId!);
       } else {
         await isar.movies.put(movie);
       }

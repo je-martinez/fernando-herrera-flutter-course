@@ -2,10 +2,10 @@ import 'package:cinemapedia_app/domain/entities/movie.dart';
 import 'package:cinemapedia_app/domain/repositories/local_storage_repository.dart';
 import 'package:cinemapedia_app/infrastructure/datasources/isar_datasource.dart';
 
-class IsarRepositoryImpl extends LocalStorageRepository {
+class LocalStorageRepositoryImpl extends LocalStorageRepository {
   final IsarDatasource datasource;
 
-  IsarRepositoryImpl({required this.datasource});
+  LocalStorageRepositoryImpl({required this.datasource});
 
   @override
   Future<bool> isMovieFavorite(int movieId) {
