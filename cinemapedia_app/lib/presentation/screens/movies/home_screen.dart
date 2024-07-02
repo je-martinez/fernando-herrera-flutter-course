@@ -4,13 +4,21 @@ import 'package:cinemapedia_app/presentation/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
   static const name = 'home_screen';
-  const HomeScreen({super.key});
+  final int pageIndex;
+  const HomeScreen({required this.pageIndex, super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      bottomNavigationBar: CustomBottomNavigation(),
-      body: HomeView(),
+    return Scaffold(
+      bottomNavigationBar: CustomBottomNavigation(pageIndex: pageIndex),
+      body: IndexedStack(
+        index: pageIndex,
+        children: const [
+          HomeView(),
+          CategoriesView(),
+          FavoritesView(),
+        ],
+      ),
     );
   }
 }
