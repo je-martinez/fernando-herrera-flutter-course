@@ -57,7 +57,7 @@ class MovieDetails {
 
   factory MovieDetails.fromJson(Map<String, dynamic> json) => MovieDetails(
         adult: json["adult"],
-        backdropPath: json["backdrop_path"],
+        backdropPath: json["backdrop_path"] ?? '',
         belongsToCollection: json["belongs_to_collection"] != null
             ? BelongsToCollection.fromJson(json["belongs_to_collection"])
             : null,
