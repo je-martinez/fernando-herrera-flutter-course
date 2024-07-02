@@ -20,6 +20,7 @@ final appRouter = GoRouter(initialLocation: '/', routes: [
               ),
             ]),
         GoRoute(
+            name: FavoritesView.name,
             path: '/favorites',
             builder: (context, state) => const FavoritesView(),
             routes: const []),

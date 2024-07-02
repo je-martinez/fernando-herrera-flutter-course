@@ -1,9 +1,39 @@
 import 'package:cinemapedia_app/presentation/providers/movies/initial_loading_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomBottomNavigation extends ConsumerWidget {
   const CustomBottomNavigation({super.key});
+
+  int getCurrentIndex(BuildContext context) {
+    final String location = GoRouterState.of(context).fullPath ?? '';
+    switch (location) {
+      case '/':
+        return 0;
+      case '/categories':
+        return 1;
+      case '/favorites':
+        return 2;
+      default:
+        return 0;
+    }
+  }
+
+  void onItemTapped(BuildContext context, int index) {
+    getCurrentIndex(context);
+    switch (index) {
+      case 0:
+        context.go('/');
+        break;
+      case 1:
+        context.go('/categories');
+        break;
+      case 2:
+        context.go('/favorites');
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -15,6 +45,8 @@ class CustomBottomNavigation extends ConsumerWidget {
 
     return BottomNavigationBar(
       elevation: 0,
+      currentIndex: getCurrentIndex(context),
+      onTap: (index) => onItemTapped(context, index),
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home_max),
