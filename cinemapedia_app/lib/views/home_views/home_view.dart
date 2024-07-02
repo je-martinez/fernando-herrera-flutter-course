@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:cinemapedia_app/domain/entities/movie.dart';
+import 'package:cinemapedia_app/presentation/widgets/widgets.dart';
 import 'package:cinemapedia_app/presentation/providers/providers.dart';
-import 'package:cinemapedia_app/presentation/widgets/movies/movie_horizontal_listview.dart';
-import 'package:cinemapedia_app/presentation/widgets/movies/movies_slideshow.dart';
-import 'package:cinemapedia_app/presentation/widgets/shared/custom_appbar.dart';
-import 'package:cinemapedia_app/presentation/widgets/shared/custom_bottom_navigation.dart';
-import 'package:cinemapedia_app/presentation/widgets/shared/full_screen_loader.dart';
 
 class HomeView extends ConsumerStatefulWidget {
-  static const name = 'home_screen';
   const HomeView({super.key});
 
   @override
-  _HomeViewState createState() => _HomeViewState();
+  HomeViewState createState() => HomeViewState();
 }
 
-class _HomeViewState extends ConsumerState<HomeView> {
+class HomeViewState extends ConsumerState<HomeView> {
   @override
   void initState() {
     super.initState();
@@ -35,18 +31,17 @@ class _HomeViewState extends ConsumerState<HomeView> {
     final upcomingMovies = ref.watch(upcomingMoviesProvider);
     final isLoading = ref.watch(initialLoadingProvider);
 
-    return Scaffold(
-        bottomNavigationBar: isLoading ? null : const CustomBottomNavigation(),
-        // body: nowPlayingMovies.isEmpty
-        body: isLoading
-            ? const FullScreenLoader()
-            : _NowPlayingMovies(
-                nowPlayingMovies: nowPlayingMovies,
-                slideShowMovies: slideShowMovies,
-                popularMovies: popularMovies,
-                topRatedMovies: topRatedMovies,
-                upcomingMovies: upcomingMovies,
-              ));
+    if (isLoading) {
+      return const FullScreenLoader();
+    }
+
+    return _NowPlayingMovies(
+      nowPlayingMovies: nowPlayingMovies,
+      slideShowMovies: slideShowMovies,
+      popularMovies: popularMovies,
+      topRatedMovies: topRatedMovies,
+      upcomingMovies: upcomingMovies,
+    );
   }
 }
 
