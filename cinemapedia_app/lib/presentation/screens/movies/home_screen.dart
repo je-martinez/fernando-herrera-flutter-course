@@ -4,15 +4,27 @@ import 'package:cinemapedia_app/presentation/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends ConsumerStatefulWidget {
+class HomeScreen extends StatelessWidget {
   static const name = 'home_screen';
   const HomeScreen({super.key});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      bottomNavigationBar: CustomBottomNavigation(),
+      body: _HomeView(),
+    );
+  }
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
+class _HomeView extends ConsumerStatefulWidget {
+  const _HomeView({super.key});
+
+  @override
+  _HomeViewState createState() => _HomeViewState();
+}
+
+class _HomeViewState extends ConsumerState<_HomeView> {
   @override
   void initState() {
     super.initState();
@@ -31,18 +43,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final upcomingMovies = ref.watch(upcomingMoviesProvider);
     final isLoading = ref.watch(initialLoadingProvider);
 
-    return Scaffold(
-        bottomNavigationBar: isLoading ? null : const CustomBottomNavigation(),
-        // body: nowPlayingMovies.isEmpty
-        body: isLoading
-            ? const FullScreenLoader()
-            : _NowPlayingMovies(
-                nowPlayingMovies: nowPlayingMovies,
-                slideShowMovies: slideShowMovies,
-                popularMovies: popularMovies,
-                topRatedMovies: topRatedMovies,
-                upcomingMovies: upcomingMovies,
-              ));
+    if (isLoading) {
+      return const FullScreenLoader();
+    }
+
+    return _NowPlayingMovies(
+      nowPlayingMovies: nowPlayingMovies,
+      slideShowMovies: slideShowMovies,
+      popularMovies: popularMovies,
+      topRatedMovies: topRatedMovies,
+      upcomingMovies: upcomingMovies,
+    );
   }
 }
 

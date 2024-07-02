@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cinemapedia_app/presentation/providers/providers.dart';
 
-class CustomBottomNavigation extends StatelessWidget {
+class CustomBottomNavigation extends ConsumerWidget {
   const CustomBottomNavigation({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isLoading = ref.watch(initialLoadingProvider);
+
+    if (isLoading) {
+      return const SizedBox.shrink();
+    }
+
     return BottomNavigationBar(
       elevation: 0,
       items: const [
