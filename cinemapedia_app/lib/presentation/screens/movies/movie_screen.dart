@@ -136,11 +136,12 @@ class _CustomSliverAppBar extends ConsumerWidget {
                   ref
                       .watch(localStorageRepositoryProvider)
                       .toogleFavorite(movie);
+                  ref.invalidate(localStorageRepositoryProvider);
                 },
               );
             },
             error: (error, stack) => const Icon(Icons.error),
-            loading: () => const CircularProgressIndicator()),
+            loading: () => Container()),
       ],
       backgroundColor: Colors.black,
       expandedHeight: size.height * 0.7,
