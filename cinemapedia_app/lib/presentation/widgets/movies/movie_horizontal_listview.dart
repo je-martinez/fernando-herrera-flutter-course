@@ -40,8 +40,8 @@ class _MovieHorizontalListViewState extends State<MovieHorizontalListView> {
 
   @override
   void dispose() {
-    scrollController.dispose();
     super.dispose();
+    scrollController.dispose();
   }
 
   @override

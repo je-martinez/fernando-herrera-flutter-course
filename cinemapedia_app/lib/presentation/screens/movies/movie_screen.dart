@@ -104,8 +104,7 @@ class _MovieScrollableContent extends StatelessWidget {
   }
 }
 
-final isFavoriteProvider =
-    FutureProvider.family.autoDispose<bool, int>((ref, int movieId) {
+final isFavoriteProvider = FutureProvider.family<bool, int>((ref, int movieId) {
   final localStorageRepository = ref.watch(localStorageRepositoryProvider);
   return localStorageRepository.isMovieFavorite(movieId);
 });
@@ -132,11 +131,14 @@ class _CustomSliverAppBar extends ConsumerWidget {
                   value ? Icons.favorite : Icons.favorite_border,
                   color: Colors.red,
                 ),
-                onPressed: () {
-                  ref
-                      .watch(localStorageRepositoryProvider)
+                onPressed: () async {
+                  // await ref
+                  //     .read(localStorageRepositoryProvider.notifier)
+                  //     .toogleFavorite(movie);
+                  await ref
+                      .read(favoriteMovieProvider.notifier)
                       .toogleFavorite(movie);
-                  ref.invalidate(localStorageRepositoryProvider);
+                  ref.invalidate(isFavoriteProvider(movie.id));
                 },
               );
             },
