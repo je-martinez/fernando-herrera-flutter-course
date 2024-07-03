@@ -36,6 +36,29 @@ class _FavoritesViewState extends ConsumerState<FavoritesView> {
     BuildContext context,
   ) {
     final favoriteMovies = ref.watch(favoriteMovieProvider).values.toList();
+
+    if (favoriteMovies.isEmpty) {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.favorite,
+              size: 100,
+              color: Colors.grey,
+            ),
+            SizedBox(height: 20),
+            Text('No tienes peliculas favoritas',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.grey,
+                )),
+            SizedBox(height: 20)
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
         body: MoviesMasonry(
       movies: favoriteMovies,

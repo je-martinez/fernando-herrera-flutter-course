@@ -104,7 +104,8 @@ class _MovieScrollableContent extends StatelessWidget {
   }
 }
 
-final isFavoriteProvider = FutureProvider.family<bool, int>((ref, int movieId) {
+final isFavoriteProvider =
+    FutureProvider.family.autoDispose<bool, int>((ref, int movieId) {
   final localStorageRepository = ref.watch(localStorageRepositoryProvider);
   return localStorageRepository.isMovieFavorite(movieId);
 });
