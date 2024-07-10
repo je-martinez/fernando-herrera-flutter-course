@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:forms_app/presentation/blocs/counter_bloc/counter_bloc.dart';
+import 'package:forms_app/presentation/blocs/bloc.dart';
 
 class BlocCounterScreen extends StatelessWidget {
   const BlocCounterScreen({super.key});
@@ -20,20 +20,22 @@ class _BlockCounterView extends StatelessWidget {
   });
 
   void increaseCounterBy(BuildContext context, int value) {
-    context.read<CounterBloc>().add(CounterIncreased(value));
+    // context.read<CounterBloc>().add(CounterIncreased(value));
+    context.read<CounterBloc>().increaseBy(value);
   }
 
   void resetCounter(BuildContext context) {
-    context.read<CounterBloc>().add(const ResetCounter());
+    // context.read<CounterBloc>().add(const ResetCounter());
+    context.read<CounterBloc>().reset();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: BlocSelector<CounterBloc, CounterState, String>(
+        title: BlocSelector<CounterBloc, CounterBlocState, String>(
           selector: (state) {
-            return state.counter.toString();
+            return state.transactionCount.toString();
           },
           builder: (context, state) {
             print('Rebuilding');

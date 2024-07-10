@@ -1,18 +1,18 @@
 part of 'counter_bloc.dart';
 
-class CounterState extends Equatable {
+class CounterBlocState extends Equatable {
   final int counter;
   final int transactionCount;
-  const CounterState({
+  const CounterBlocState({
     this.counter = 10,
     this.transactionCount = 0,
   });
 
-  CounterState copyWith({
+  CounterBlocState copyWith({
     int? counter,
     int? transactionCount,
   }) {
-    return CounterState(
+    return CounterBlocState(
       counter: counter ?? this.counter,
       transactionCount: transactionCount ?? this.transactionCount,
     );
