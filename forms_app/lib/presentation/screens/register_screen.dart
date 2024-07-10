@@ -47,43 +47,39 @@ class _RegisterView extends StatelessWidget {
   }
 }
 
-class _RegisterForm extends StatefulWidget {
+class _RegisterForm extends StatelessWidget {
   const _RegisterForm({super.key});
 
-  @override
-  State<_RegisterForm> createState() => _RegisterFormState();
-}
-
-class _RegisterFormState extends State<_RegisterForm> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  // String username = '';
-  // String email = '';
-  // String password = '';
-
+  // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final cubit = context.watch<RegisterCubit>();
+    final username = cubit.state.username;
+    final password = cubit.state.password;
+    final email = cubit.state.email;
 
     return Form(
-      key: _formKey,
+      // key: _formKey,
       child: Column(
         children: [
           CustomTextFormField(
-            label: "Username",
-            onChanged: (value) {
-              // username = value;
-              cubit.usernameChanged(value);
-            },
-            validator: (value) {
-              if (value == null) return 'El campo es obligatorio';
-              if (value.isEmpty) return 'El campo es obligatorio';
-              if (value.trim().isEmpty) return 'El campo es obligatorio';
-              if (value.length < 6) {
-                return 'El campo debe tener al menos 3 caracteres';
-              }
-              return null;
-            },
-          ),
+              label: "Username",
+              onChanged: (value) {
+                // username = value;
+                // _formKey.currentState!.validate();
+                cubit.usernameChanged(value);
+              },
+              errorMessage: username.errorMessage
+              // validator: (value) {
+              //   if (value == null) return 'El campo es obligatorio';
+              //   if (value.isEmpty) return 'El campo es obligatorio';
+              //   if (value.trim().isEmpty) return 'El campo es obligatorio';
+              //   if (value.length < 6) {
+              //     return 'El campo debe tener al menos 3 caracteres';
+              //   }
+              //   return null;
+              // },
+              ),
           const SizedBox(
             height: 10,
           ),
@@ -91,19 +87,21 @@ class _RegisterFormState extends State<_RegisterForm> {
             label: "Email",
             onChanged: (value) {
               // email = value;
+              // _formKey.currentState!.validate();
               cubit.emailChanged(value);
             },
-            validator: (value) {
-              if (value == null) return 'El campo es obligatorio';
-              if (value.isEmpty) return 'El campo es obligatorio';
-              if (value.trim().isEmpty) return 'El campo es obligatorio';
-              final isEmail =
-                  RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value);
-              if (!isEmail) {
-                return 'El campo debe ser un email';
-              }
-              return null;
-            },
+            errorMessage: email.errorMessage,
+            // validator: (value) {
+            //   if (value == null) return 'El campo es obligatorio';
+            //   if (value.isEmpty) return 'El campo es obligatorio';
+            //   if (value.trim().isEmpty) return 'El campo es obligatorio';
+            //   final isEmail =
+            //       RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value);
+            //   if (!isEmail) {
+            //     return 'El campo debe ser un email';
+            //   }
+            //   return null;
+            // },
           ),
           const SizedBox(
             height: 10,
@@ -111,27 +109,29 @@ class _RegisterFormState extends State<_RegisterForm> {
           CustomTextFormField(
             label: "Password",
             obscureText: true,
+            errorMessage: password.errorMessage,
             onChanged: (value) {
               // password = value;
+              // _formKey.currentState!.validate();
               cubit.passwordChanged(value);
             },
-            validator: (value) {
-              if (value == null) return 'El campo es obligatorio';
-              if (value.isEmpty) return 'El campo es obligatorio';
-              if (value.trim().isEmpty) return 'El campo es obligatorio';
-              if (value.length < 6) {
-                return 'El campo debe tener al menos 6 caracteres';
-              }
-              return null;
-            },
+            // validator: (value) {
+            //   if (value == null) return 'El campo es obligatorio';
+            //   if (value.isEmpty) return 'El campo es obligatorio';
+            //   if (value.trim().isEmpty) return 'El campo es obligatorio';
+            //   if (value.length < 6) {
+            //     return 'El campo debe tener al menos 6 caracteres';
+            //   }
+            //   return null;
+            // },
           ),
           const SizedBox(
             height: 10,
           ),
           FilledButton.tonalIcon(
             onPressed: () {
-              final isValid = _formKey.currentState!.validate();
-              if (!isValid) return;
+              // final isValid = _formKey.currentState!.validate();
+              // if (!isValid) return;
               cubit.onSubmit();
             },
             label: const Text('Guardar'),
