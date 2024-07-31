@@ -16,7 +16,14 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     );
   }
 
-  NotificationsBloc() : super(const NotificationsState()) {}
+  NotificationsBloc() : super(const NotificationsState()) {
+    on<NotificationStatusChanged>(_onNotificationStatusChanged);
+  }
+
+  void _onNotificationStatusChanged(
+      NotificationStatusChanged event, Emitter<NotificationsState> emit) {
+    emit(state.copyWith(status: event.status));
+  }
 
   void requestPermission() async {
     NotificationSettings settings = await messaging.requestPermission(
@@ -29,6 +36,6 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       sound: true,
     );
 
-    emit(state.copyWith(status: settings.authorizationStatus));
+    add(NotificationStatusChanged(settings.authorizationStatus));
   }
 }
