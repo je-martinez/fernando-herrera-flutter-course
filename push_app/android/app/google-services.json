@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "679678129488",
+    "project_id": "permissions-app-7a4ce",
+    "storage_bucket": "permissions-app-7a4ce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679678129488:android:508cad6eef2d494cf32855",
+        "android_client_info": {
+          "package_name": "com.example.push_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAVgQB7HEuiZW9YJLj0tbINg1TYJBt14g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679678129488:android:2a7d12af1271db77f32855",
+        "android_client_info": {
+          "package_name": "com.jemartinez.push_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAVgQB7HEuiZW9YJLj0tbINg1TYJBt14g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
