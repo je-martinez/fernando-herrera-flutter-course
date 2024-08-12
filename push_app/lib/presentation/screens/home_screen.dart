@@ -46,7 +46,7 @@ class _HomeView extends StatelessWidget {
         final message = notifications[index];
         return ListTile(
           onTap: () {
-            context.go(
+            context.push(
               "${DetailsScreen.name}/${message.messageId}",
             );
           },
