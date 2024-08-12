@@ -61,11 +61,11 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     }
   }
 
-  void _handleRemoteMessage(RemoteMessage message) {
+  void handleRemoteMessage(RemoteMessage message) {
     // print('Notification: ${message.data}');
     if (message.notification == null) return;
     final notification = PushMessage(
-        messageId: message?.messageId?.replaceAll(':', '').replaceAll('%', ''),
+        messageId: message.messageId?.replaceAll(':', '').replaceAll('%', ''),
         title: message.notification?.title ?? '',
         body: message.notification?.body ?? '',
         sentDate: message.sentTime ?? DateTime.now(),
@@ -81,7 +81,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   }
 
   void _onForegroundMessage() {
-    FirebaseMessaging.onMessage.listen(_handleRemoteMessage);
+    FirebaseMessaging.onMessage.listen(handleRemoteMessage);
   }
 
   void requestPermission() async {
