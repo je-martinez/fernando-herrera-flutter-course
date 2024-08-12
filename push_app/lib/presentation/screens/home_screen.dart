@@ -23,9 +23,33 @@ class HomeScreen extends StatelessWidget {
               })
         ],
       ),
-      body: const Center(
-        child: Text('Hello World!'),
-      ),
+      body: _HomeView(),
+    );
+  }
+}
+
+class _HomeView extends StatelessWidget {
+  const _HomeView({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final notifications =
+        context.watch<NotificationsBloc>().state.notifications;
+
+    return ListView.builder(
+      itemCount: notifications.length,
+      itemBuilder: (context, index) {
+        final message = notifications[index];
+        return ListTile(
+          leading: message.imageUrl != null
+              ? Image.network(message.imageUrl!)
+              : Icon(Icons.notifications),
+          title: Text(message.title),
+          subtitle: Text(message.body),
+        );
+      },
     );
   }
 }

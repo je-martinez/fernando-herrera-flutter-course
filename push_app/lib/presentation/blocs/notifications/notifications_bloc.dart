@@ -1,11 +1,22 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:push_app/domain/entities/push_message.dart';
 import 'package:push_app/firebase_options.dart';
 
 part 'notifications_event.dart';
 part 'notifications_state.dart';
+
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  // print("Handling a background message: ${message.messageId}");
+}
 
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -18,6 +29,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
   NotificationsBloc() : super(const NotificationsState()) {
     on<NotificationStatusChanged>(_onNotificationStatusChanged);
+    on<NotificationReceived>(_onPushMessageReceived);
     //Check for permissions
     _initialStatusChange();
     //Handle Notifications
@@ -28,6 +40,13 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       NotificationStatusChanged event, Emitter<NotificationsState> emit) {
     emit(state.copyWith(status: event.status));
     _getFCMToken();
+  }
+
+  void _onPushMessageReceived(
+      NotificationReceived event, Emitter<NotificationsState> emit) {
+    final notifications = List<PushMessage>.from(state.notifications);
+    notifications.add(event.message);
+    emit(state.copyWith(notifications: notifications));
   }
 
   void _initialStatusChange() async {
@@ -43,10 +62,22 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   }
 
   void _handleRemoteMessage(RemoteMessage message) {
-    print('Notification: ${message.data}');
+    // print('Notification: ${message.data}');
     if (message.notification == null) return;
-    print('Notification: ${message.notification!.title}');
-    print('Notification: ${message.notification!.body}');
+    final notification = PushMessage(
+        messageId: message?.messageId?.replaceAll(':', '').replaceAll('%', ''),
+        title: message.notification?.title ?? '',
+        body: message.notification?.body ?? '',
+        sentDate: message.sentTime ?? DateTime.now(),
+        data: message.data,
+        imageUrl: Platform.isAndroid
+            ? message.notification?.android?.imageUrl
+            : message.notification?.apple?.imageUrl);
+
+    add(NotificationReceived(notification));
+
+    // print('Notification: ${message.notification!.title}');
+    // print('Notification: ${message.notification!.body}');
   }
 
   void _onForegroundMessage() {
