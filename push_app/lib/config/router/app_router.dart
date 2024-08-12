@@ -6,4 +6,11 @@ final appRouter = GoRouter(routes: [
       path: '/',
       name: HomeScreen.name,
       builder: (context, state) => const HomeScreen()),
+  GoRoute(
+    path: '/details/:pushMessageId',
+    name: DetailsScreen.name,
+    builder: (context, state) => DetailsScreen(
+      pushMessageId: state.pathParameters['pushMessageId']!,
+    ),
+  )
 ]);

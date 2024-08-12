@@ -44,8 +44,8 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
   void _onPushMessageReceived(
       NotificationReceived event, Emitter<NotificationsState> emit) {
-    final notifications = List<PushMessage>.from(state.notifications);
-    notifications.add(event.message);
+    final notifications =
+        List<PushMessage>.from([event.message, ...state.notifications]);
     emit(state.copyWith(notifications: notifications));
   }
 
@@ -96,5 +96,15 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     );
 
     add(NotificationStatusChanged(settings.authorizationStatus));
+  }
+
+  PushMessage? getMessageById(String pushMessageId) {
+    final exists = state.notifications.any(
+      (element) => element.messageId == pushMessageId,
+    );
+    if (!exists) return null;
+    return state.notifications.firstWhere(
+      (element) => element.messageId == pushMessageId,
+    );
   }
 }
