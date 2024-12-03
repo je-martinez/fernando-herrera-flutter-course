@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:push_app/config/local_notifications/local_notifications.dart';
 import 'package:push_app/domain/entities/push_message.dart';
 import 'package:push_app/firebase_options.dart';
 
@@ -76,6 +77,13 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
     add(NotificationReceived(notification));
 
+    LocalNotifications.showLocalNotification(
+      id: 1,
+      title: notification.title,
+      body: notification.body,
+      payload: notification.messageId,
+    );
+
     // print('Notification: ${message.notification!.title}');
     // print('Notification: ${message.notification!.body}');
   }
@@ -94,6 +102,8 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       provisional: false,
       sound: true,
     );
+
+    await LocalNotifications.requestPermissionLocalNotifications();
 
     add(NotificationStatusChanged(settings.authorizationStatus));
   }
