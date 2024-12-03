@@ -4,7 +4,6 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:push_app/config/local_notifications/local_notifications.dart';
 import 'package:push_app/domain/entities/push_message.dart';
 import 'package:push_app/firebase_options.dart';
 
@@ -20,7 +19,15 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
+  int pushNumberId = 0;
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+  final Future<void> Function()? requestLocalNotificationsPermisions;
+  final void Function({
+    required int id,
+    String? title,
+    String? body,
+    String? payload,
+  })? showLocalNotification;
 
   static initFirebaseFCM() {
     return Firebase.initializeApp(
@@ -28,7 +35,10 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     );
   }
 
-  NotificationsBloc() : super(const NotificationsState()) {
+  NotificationsBloc({
+    this.requestLocalNotificationsPermisions,
+    this.showLocalNotification,
+  }) : super(const NotificationsState()) {
     on<NotificationStatusChanged>(_onNotificationStatusChanged);
     on<NotificationReceived>(_onPushMessageReceived);
     //Check for permissions
@@ -77,15 +87,14 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
     add(NotificationReceived(notification));
 
-    LocalNotifications.showLocalNotification(
-      id: 1,
-      title: notification.title,
-      body: notification.body,
-      payload: notification.messageId,
-    );
-
-    // print('Notification: ${message.notification!.title}');
-    // print('Notification: ${message.notification!.body}');
+    if (showLocalNotification != null) {
+      showLocalNotification!(
+        id: ++pushNumberId,
+        title: notification.title,
+        body: notification.body,
+        payload: notification.messageId,
+      );
+    }
   }
 
   void _onForegroundMessage() {
@@ -103,7 +112,9 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       sound: true,
     );
 
-    await LocalNotifications.requestPermissionLocalNotifications();
+    if (requestLocalNotificationsPermisions != null) {
+      await requestLocalNotificationsPermisions!();
+    }
 
     add(NotificationStatusChanged(settings.authorizationStatus));
   }
